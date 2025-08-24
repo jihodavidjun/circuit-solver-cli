@@ -31,13 +31,18 @@ File: `examples/series_parallel.json`
 ```
 ## Run the Program
 `python project.py --file examples/series_parallel.json`
+
 Output:
+
 `Total resistance: 270 Ω`
 
 ## Function Descriptions
 `load_netlist(path)` → loads a JSON file describing the circuit
+
 `parallel(values)` → computes equivalent resistance for parallel resistors
+
 `compute_total_resistance(node)` → recursively computes total resistance of any circuit node
+
 `main()` → provides the command-line interface
 
 ## Test
