@@ -28,4 +28,22 @@ File: `examples/series_parallel.json`
     {"type": "R", "value": 50}
   ]
 }
+```
+## Run the Program
+`python project.py --file examples/series_parallel.json`
+Output:
+`Total resistance: 270 Ω`
 
+## Function Descriptions
+`load_netlist(path)` → loads a JSON file describing the circuit
+`parallel(values)` → computes equivalent resistance for parallel resistors
+`compute_total_resistance(node)` → recursively computes total resistance of any circuit node
+`main()` → provides the command-line interface
+
+## Test
+This project includes `test_project.py` for pytest.
+`pytest -q`
+
+## Motivation
+As an Electrical Engineering student, I wanted my CS50P final to connect to my field.
+This project simulates basic resistor circuits, showing both my programming and EE interests while keeping the scope small and beginner-appropriate.
