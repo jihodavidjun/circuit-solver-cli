@@ -1,0 +1,14 @@
+{
+  "type": "S",
+  "children": [
+    {"type": "R", "value": 100},
+    {
+      "type": "P",
+      "children": [
+        {"type": "R", "value": 200},
+        {"type": "R", "value": 300}
+      ]
+    },
+    {"type": "R", "value": 50}
+  ]
+}
