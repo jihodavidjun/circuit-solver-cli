@@ -1,0 +1,7 @@
+{
+  "type": "P",
+  "children": [
+    {"type": "R", "value": 400},
+    {"type": "R", "value": 600}
+  ]
+}
