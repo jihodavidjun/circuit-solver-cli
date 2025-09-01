@@ -108,6 +108,8 @@ def test_bool_not_allowed():
     with pytest.raises(ValueError):
         compute_total_resistance({"type": "R", "value": True})
 
+
+# ---------------- Extra coverage tests ----------------
 import sys, subprocess, json
 
 def test_cli_entrypoint(tmp_path):
