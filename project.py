@@ -1,66 +1,69 @@
-import argparse  
-import json       
+import argparse
+import json
 
+def load_netlist(path: str) -> dict:
+    with open(path, "r") as f:
+        return json.load(f)
 
-def load_netlist(path: str) -> dict: # json to python dict.
-    with open(path, "r") as f:   
-        data = json.load(f)     
-    return data                  
+def _checked_value(v) -> float:
+    # Must be a real number (bools are ints, so exclude them) and non-negative.
+    if isinstance(v, bool) or not isinstance(v, (int, float)):
+        raise ValueError("Resistance must be a number")
+    if v < 0:
+        raise ValueError("Resistance must be non-negative")
+    return float(v)
 
-
-def parallel(values: list[float]) -> float: # total resistance of resistors in parallel.
+def parallel(values: list[float]) -> float:
     """
-    Formula: 1/R_total = 1/R1 + 1/R2 + ...
-    Special rules:
-      - If any resistor = 0, total is 0 (short circuit).
-      - If there are no resistors, total is infinite (open circuit).
+    1/R_total = sum(1/Ri)
+    - any 0-ohm branch => 0 (short)
+    - empty list => inf (open)
     """
-    if not values:               
-        return float("inf")      # open circuit
-    inv = 0.0                    # inv is the sum of reciprocals
-    for v in values:             
-        if v == 0.0:             
-            return 0.0           
-        inv += 1.0 / v           # add reciprocal 1/R to the sum
-    return 1.0 / inv             # total resistance
-
+    if not values:
+        return float("inf")
+    inv = 0.0
+    for v in values:
+        v = _checked_value(v)
+        if v == 0.0:
+            return 0.0
+        inv += 1.0 / v
+    return 1.0 / inv
 
 def compute_total_resistance(node: dict) -> float:
     """
-    Recursive method to compute resistance of a circuit node.
-    Each node is a dict with:
-      - {"type": "R", "value": 100}
-      - {"type": "S", "children": [ ... ]}
-      - {"type": "P", "children": [ ... ]}
+    Node forms:
+      {"type": "R", "value": 100}
+      {"type": "S", "children": [...]}
+      {"type": "P", "children": [...]}
     """
-    kind = node["type"]          # read the type of node ("R", "S", or "P")
+    kind = node["type"]
 
-    if kind == "R":              # single resistor
-        return float(node["value"])  
+    if kind == "R":
+        return _checked_value(node.get("value"))
 
-    if kind == "S":              # series: add all
-        total = 0.0
-        for child in node.get("children", []): # return [] if children's missing
-            total += compute_total_resistance(child)
-        return total
+    if kind == "S":
+        return sum(compute_total_resistance(ch) for ch in node.get("children", []))
 
-    if kind == "P":              # parallel: use the helper function
-        values = [compute_total_resistance(ch) for ch in node.get("children", [])]
-        return parallel(values)
+    if kind == "P":
+        children = node.get("children", [])
+        if not children:
+            return float("inf")
+        denom = 0.0
+        for ch in children:
+            r = compute_total_resistance(ch)
+            if r == 0.0:
+                return 0.0
+            denom += 1.0 / r
+        return 1.0 / denom
 
     raise ValueError(f"Unknown node type: {kind}")
-
 
 def main():
     parser = argparse.ArgumentParser(description="JSON Circuit Solver (Resistors Only)")
     parser.add_argument("--file", required=True, help="Path to JSON netlist file")
     args = parser.parse_args()
-
-    data = load_netlist(args.file)
-    total = compute_total_resistance(data)
-  
+    total = compute_total_resistance(load_netlist(args.file))
     print(f"Total resistance: {total:.6g} Ω")
-
 
 if __name__ == "__main__":
     main()
