@@ -1,10 +1,8 @@
 # JSON Circuit Solver
 
 ## Overview
-This project is my final submission for Harvard's CS50P (Introduction to Programming with Python).  
-It is a simple command-line tool that computes the total resistance of resistor circuits.
-
-Circuits are described in a **JSON file** using only:
+A lightweight command-line tool that computes the total resistance of a resistor network described in **JSON**. 
+The input uses three primitives:
 - `R(value)` for resistors
 - `S([...])` for series connections
 - `P([...])` for parallel connections
@@ -50,5 +48,4 @@ This project includes `test_project.py` for pytest.
 `pytest -q`
 
 ## Motivation
-As an Electrical Engineering student, I wanted my CS50P final to connect to my field.
-This project simulates basic resistor circuits, showing both my programming and EE interests while keeping the scope small and beginner-appropriate.
+I wanted a small but robust project that ties programming to electrical engineering. This tool showcases how I turn a specification into working code with tests: parse a structured format (JSON), model the circuit as a tree, apply well-defined rules (series/parallel), and report a clear result. It’s intentionally scoped to be dependable and easy to extend (e.g., more components later) while demonstrating clean design, documentation, and testable logic.
