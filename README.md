@@ -1,7 +1,7 @@
 # JSON Circuit Solver
 
 ## Overview
-A lightweight command-line tool that computes the total resistance of a resistor network described in **JSON**. 
+CS50P Final Project: a lightweight command-line tool that computes the total resistance of a resistor network described in **JSON**. 
 The input uses three primitives:
 - `R(value)` for resistors
 - `S([...])` for series connections
